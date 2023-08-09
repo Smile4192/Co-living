@@ -1,0 +1,18 @@
+#!/usr/bin/env sh
+# This file is necessary to check for linting errors when committing code.
+. "$(dirname -- "$0")/_/husky.sh"
+
+# Check if `yarn.lock` is staged for commit.
+check_yarn_lock() {
+  if git diff --cached --name-only | grep -q "^yarn.lock$"; then
+    echo "Error: Do not commit yarn.lock."
+    echo "If you installed with yarn, reinstall using npm install,"
+    echo "instead, and remove yarn.lock."
+    echo
+    exit 1
+  fi
+}
+
+check_yarn_lock
+
+npx lint-staged
